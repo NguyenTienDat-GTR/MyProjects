@@ -1,1 +1,1 @@
-Đây là các projects nhỏ cá nhân của tôi
+Đây là các projects cá nhân nhỏ của tôi
