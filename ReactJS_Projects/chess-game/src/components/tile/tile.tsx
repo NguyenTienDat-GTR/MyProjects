@@ -1,3 +1,4 @@
+//tile.tsx
 import './tile.css';
 
 interface Props {

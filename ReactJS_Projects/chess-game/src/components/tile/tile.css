@@ -1,12 +1,12 @@
 .tile {
 	display: grid;
 	place-content: center;
-	width: 75px;
-	height: 75px;
+	width: 100px;
+	height: 100px;
 }
 .tile .chess-piece {
-	width: 60px;
-	height: 60px;
+	width: 75px;
+	height: 75px;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 70px;
