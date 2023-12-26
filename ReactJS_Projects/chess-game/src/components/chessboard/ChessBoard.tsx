@@ -6,7 +6,7 @@ import Referee from '../../referee/Referee';
 const horizoltalAxis = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 const verticalAxis = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
-interface Piece {
+export interface Piece {
 	image: string;
 	x: number;
 	y: number;
@@ -123,7 +123,7 @@ export default function ChessBoard() {
 			setPieces((value) => {
 				const pieces = value.map((p) => {
 					if (p.x === gridX && p.y === gridY) {
-						const vaildMove = referee.isValidMoved(gridX, gridY, x, y, p.type, p.team);
+						const vaildMove = referee.isValidMoved(gridX, gridY, x, y, p.type, p.team, value);
 
 						if (vaildMove) {
 							p.x = x;
