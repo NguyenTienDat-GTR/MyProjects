@@ -1,8 +1,9 @@
-import { PieceType, TeamType, Piece } from '../components/chessboard/ChessBoard';
+import { PieceType, TeamType, Piece, Position } from '../constants';
 
 export default class Referee {
-	tileIsOcupied(x: number, y: number, boardState: Piece[]): boolean {
-		const piece = boardState.find((p) => p.x === x && p.y === y);
+	tileIsOccupied(x: number, y: number, boardState: Piece[]): boolean {
+		const piece = boardState.find((p) => p.position.x === x && p.position.y === y);
+
 		if (piece) {
 			return true;
 		} else {
@@ -10,8 +11,8 @@ export default class Referee {
 		}
 	}
 
-	tileIsOcupiedByOpponent(x: number, y: number, team: TeamType, boardState: Piece[]): boolean {
-		const piece = boardState.find((p) => p.x === x && p.y === y && p.team !== team);
+	tileIsOccupiedByOpponent(x: number, y: number, boardState: Piece[], team: TeamType): boolean {
+		const piece = boardState.find((p) => p.position.x === x && p.position.y === y && p.team !== team);
 
 		if (piece) {
 			return true;
@@ -21,10 +22,8 @@ export default class Referee {
 	}
 
 	isEnPassantMove(
-		px: number,
-		py: number,
-		x: number,
-		y: number,
+		initialPosition: Position,
+		desiredPosition: Position,
 		type: PieceType,
 		team: TeamType,
 		boardState: Piece[]
@@ -32,57 +31,78 @@ export default class Referee {
 		const pawnDirection = team === TeamType.OUR ? 1 : -1;
 
 		if (type === PieceType.PAWN) {
-			if ((x - px === -1 || x - px === 1) && y - py === pawnDirection) {
-				const piece = boardState.find((p) => p.x === x && p.y === y - pawnDirection && p.enPassant);
+			if (
+				(desiredPosition.x - initialPosition.x === -1 || desiredPosition.x - initialPosition.x === 1) &&
+				desiredPosition.y - initialPosition.y === pawnDirection
+			) {
+				const piece = boardState.find(
+					(p) =>
+						p.position.x === desiredPosition.x &&
+						p.position.y === desiredPosition.y - pawnDirection &&
+						p.enPassant
+				);
 				if (piece) {
 					return true;
 				}
 			}
 		}
-		//if the attacking piece is a pawn DONE
-		//uper left or upper right || bottom left or bottom right DONE
-		//if a piece is under / above the attacked tile DONE
-		//if the attacked piecehas made an en passant move in the previous turn DONE
-
-		//put piece in correct position
-		//remove en passanted piece
 
 		return false;
 	}
-	isValidMoved(px: number, py: number, x: number, y: number, type: PieceType, team: TeamType, boardState: Piece[]) {
-		// console.log('referee is checking the move...');
-		// console.log(`previous location:  (${px},${py})`);
-		// console.log(`current location:  (${x},${y})`);
-		// console.log(`piece type:  (${type})`);
-		// console.log(`team type:  (${team})`);
 
+	isValidMove(
+		initialPosition: Position,
+		desiredPosition: Position,
+		type: PieceType,
+		team: TeamType,
+		boardState: Piece[]
+	) {
 		if (type === PieceType.PAWN) {
 			const specialRow = team === TeamType.OUR ? 1 : 6;
 			const pawnDirection = team === TeamType.OUR ? 1 : -1;
 
-			//movement logic of the pawn
-			if (px === x && py === specialRow && y - py === 2 * pawnDirection) {
-				if (!this.tileIsOcupied(x, y, boardState) && !this.tileIsOcupied(x, y - pawnDirection, boardState)) {
+			//MOVEMENT LOGIC
+			if (
+				initialPosition.x === desiredPosition.x &&
+				initialPosition.y === specialRow &&
+				desiredPosition.y - initialPosition.y === 2 * pawnDirection
+			) {
+				if (
+					!this.tileIsOccupied(desiredPosition.x, desiredPosition.y, boardState) &&
+					!this.tileIsOccupied(desiredPosition.x, desiredPosition.y - pawnDirection, boardState)
+				) {
 					return true;
 				}
-			} else if (px === x && y - py === pawnDirection) {
-				if (!this.tileIsOcupied(x, y, boardState)) {
+			} else if (
+				initialPosition.x === desiredPosition.x &&
+				desiredPosition.y - initialPosition.y === pawnDirection
+			) {
+				if (!this.tileIsOccupied(desiredPosition.x, desiredPosition.y, boardState)) {
 					return true;
 				}
 			}
-			//  attack logic of the pawn
-			else if (x - px === -1 && y - py === pawnDirection) {
-				//attack in the upper or bottom left corner
-				if (this.tileIsOcupiedByOpponent(x, y, team, boardState)) {
+			//ATTACK LOGIC
+			else if (
+				desiredPosition.x - initialPosition.x === -1 &&
+				desiredPosition.y - initialPosition.y === pawnDirection
+			) {
+				//ATTACK IN UPPER OR BOTTOM LEFT CORNER
+				console.log('upper / bottom left');
+				if (this.tileIsOccupiedByOpponent(desiredPosition.x, desiredPosition.y, boardState, team)) {
 					return true;
 				}
-			} else if (x - px === 1 && y - py === pawnDirection) {
-				//attack in the upper or bottom right corner
-				if (this.tileIsOcupiedByOpponent(x, y, team, boardState)) {
+			} else if (
+				desiredPosition.x - initialPosition.x === 1 &&
+				desiredPosition.y - initialPosition.y === pawnDirection
+			) {
+				//ATTACK IN THE UPPER OR BOTTOM RIGHT CORNER
+				console.log('upper / bottom right');
+				if (this.tileIsOccupiedByOpponent(desiredPosition.x, desiredPosition.y, boardState, team)) {
 					return true;
 				}
 			}
 		}
+
 		return false;
 	}
 }
