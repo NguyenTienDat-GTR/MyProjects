@@ -130,7 +130,7 @@ export default function ChessBoard() {
 					// and if the piece is attacked, remove it
 
 					const updatedPieces = pieces.reduce((result, piece) => {
-						if (piece.x === currenPiece.x && piece.y === currenPiece.y) {
+						if (piece.x === gridX && piece.y === gridY) {
 							piece.x = x;
 							piece.y = y;
 							result.push(piece);
@@ -141,20 +141,6 @@ export default function ChessBoard() {
 					}, [] as Piece[]);
 
 					setPieces(updatedPieces);
-
-					// setPieces((value) => {
-					// 	const pieces = value.reduce((result, piece) => {
-					// 		if (piece.x === currenPiece.x && piece.y === currenPiece.y) {
-					// 			piece.x = x;
-					// 			piece.y = y;
-					// 			result.push(piece);
-					// 		} else if (!(piece.x === x && piece.y === y)) {
-					// 			result.push(piece);
-					// 		}
-					// 		return result;
-					// 	}, [] as Piece[]);
-					// 	return pieces;
-					// });
 				} else {
 					//reset the piece position
 					activePiece.style.position = 'relative';
