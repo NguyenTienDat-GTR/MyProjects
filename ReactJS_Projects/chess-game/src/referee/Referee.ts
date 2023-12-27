@@ -2,7 +2,6 @@ import { PieceType, TeamType, Piece } from '../components/chessboard/ChessBoard'
 
 export default class Referee {
 	tileIsOcupied(x: number, y: number, boardState: Piece[]): boolean {
-		console.log('checking if  tile is ocupied...');
 		const piece = boardState.find((p) => p.x === x && p.y === y);
 		if (piece) {
 			return true;
@@ -10,6 +9,17 @@ export default class Referee {
 			return false;
 		}
 	}
+
+	tileIsOcupiedByOpponent(x: number, y: number, team: TeamType, boardState: Piece[]): boolean {
+		const piece = boardState.find((p) => p.x === x && p.y === y && p.team !== team);
+
+		if (piece) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	isValidMoved(px: number, py: number, x: number, y: number, type: PieceType, team: TeamType, boardState: Piece[]) {
 		// console.log('referee is checking the move...');
 		// console.log(`previous location:  (${px},${py})`);
@@ -21,12 +31,25 @@ export default class Referee {
 			const specialRow = team === TeamType.OUR ? 1 : 6;
 			const pawnDirection = team === TeamType.OUR ? 1 : -1;
 
+			//movement logic of the pawn
 			if (px === x && py === specialRow && y - py === 2 * pawnDirection) {
 				if (!this.tileIsOcupied(x, y, boardState) && !this.tileIsOcupied(x, y - pawnDirection, boardState)) {
 					return true;
 				}
 			} else if (px === x && y - py === pawnDirection) {
 				if (!this.tileIsOcupied(x, y, boardState)) {
+					return true;
+				}
+			}
+			//  attack logic of the pawn
+			else if (x - px === -1 && y - py === pawnDirection) {
+				//attack in the upper or bottom left corner
+				if (this.tileIsOcupiedByOpponent(x, y, team, boardState)) {
+					return true;
+				}
+			} else if (x - px === 1 && y - py === pawnDirection) {
+				//attack in the upper or bottom right corner
+				if (this.tileIsOcupiedByOpponent(x, y, team, boardState)) {
 					return true;
 				}
 			}

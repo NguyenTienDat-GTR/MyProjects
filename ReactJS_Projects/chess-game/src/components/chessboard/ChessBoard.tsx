@@ -119,25 +119,49 @@ export default function ChessBoard() {
 			const x = Math.floor((e.clientX - chessboard.offsetLeft) / 100);
 			const y = Math.abs(Math.ceil((e.clientY - chessboard.offsetTop - 800) / 100));
 
-			// update piece position
-			setPieces((value) => {
-				const pieces = value.map((p) => {
-					if (p.x === gridX && p.y === gridY) {
-						const vaildMove = referee.isValidMoved(gridX, gridY, x, y, p.type, p.team, value);
+			const currenPiece = pieces.find((p) => p.x === gridX && p.y === gridY);
+			const attackedPiece = pieces.find((p) => p.x === x && p.y === y);
 
-						if (vaildMove) {
-							p.x = x;
-							p.y = y;
-						} else {
-							activePiece.style.position = 'relative';
-							activePiece.style.removeProperty('left');
-							activePiece.style.removeProperty('top');
+			if (currenPiece) {
+				const validMove = referee.isValidMoved(gridX, gridY, x, y, currenPiece.type, currenPiece.team, pieces);
+
+				if (validMove) {
+					// update piece position
+					// and if the piece is attacked, remove it
+
+					const updatedPieces = pieces.reduce((result, piece) => {
+						if (piece.x === currenPiece.x && piece.y === currenPiece.y) {
+							piece.x = x;
+							piece.y = y;
+							result.push(piece);
+						} else if (!(piece.x === x && piece.y === y)) {
+							result.push(piece);
 						}
-					}
-					return p;
-				});
-				return pieces;
-			});
+						return result;
+					}, [] as Piece[]);
+
+					setPieces(updatedPieces);
+
+					// setPieces((value) => {
+					// 	const pieces = value.reduce((result, piece) => {
+					// 		if (piece.x === currenPiece.x && piece.y === currenPiece.y) {
+					// 			piece.x = x;
+					// 			piece.y = y;
+					// 			result.push(piece);
+					// 		} else if (!(piece.x === x && piece.y === y)) {
+					// 			result.push(piece);
+					// 		}
+					// 		return result;
+					// 	}, [] as Piece[]);
+					// 	return pieces;
+					// });
+				} else {
+					//reset the piece position
+					activePiece.style.position = 'relative';
+					activePiece.style.removeProperty('left');
+					activePiece.style.removeProperty('top');
+				}
+			}
 			setActivePiece(null);
 		}
 	}
