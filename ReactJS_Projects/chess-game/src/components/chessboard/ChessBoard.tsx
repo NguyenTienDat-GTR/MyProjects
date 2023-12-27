@@ -12,6 +12,7 @@ export interface Piece {
 	y: number;
 	type: PieceType;
 	team: TeamType;
+	enPassant?: boolean;
 }
 export enum TeamType {
 	OPPONENT,
@@ -124,17 +125,55 @@ export default function ChessBoard() {
 
 			if (currenPiece) {
 				const validMove = referee.isValidMoved(gridX, gridY, x, y, currenPiece.type, currenPiece.team, pieces);
+				const isEnPassantMove = referee.isEnPassantMove(
+					gridX,
+					gridY,
+					x,
+					y,
+					currenPiece.type,
+					currenPiece.team,
+					pieces
+				);
 
-				if (validMove) {
+				const pawnDirection = currenPiece.team === TeamType.OUR ? 1 : -1;
+
+				if (isEnPassantMove) {
+					const updatedPieces = pieces.reduce((result, piece) => {
+						if (piece.x === gridX && piece.y === gridY) {
+							piece.enPassant = false;
+							piece.x = x;
+							piece.y = y;
+							result.push(piece);
+						} else if (!(piece.x === x && piece.y === y - pawnDirection)) {
+							if (piece.type === PieceType.PAWN) {
+								piece.enPassant = false;
+							}
+							result.push(piece);
+						}
+						return result;
+					}, [] as Piece[]);
+
+					setPieces(updatedPieces);
+					
+				} else if (validMove) {
 					// update piece position
 					// and if the piece is attacked, remove it
 
 					const updatedPieces = pieces.reduce((result, piece) => {
 						if (piece.x === gridX && piece.y === gridY) {
+							if (Math.abs(gridY - y) === 2 && piece.type === PieceType.PAWN) {
+								//special move
+								piece.enPassant = true;
+							} else {
+								piece.enPassant = false;
+							}
 							piece.x = x;
 							piece.y = y;
 							result.push(piece);
 						} else if (!(piece.x === x && piece.y === y)) {
+							if (piece.type === PieceType.PAWN) {
+								piece.enPassant = false;
+							}
 							result.push(piece);
 						}
 						return result;
