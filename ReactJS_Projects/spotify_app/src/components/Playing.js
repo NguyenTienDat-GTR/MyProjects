@@ -12,13 +12,23 @@ export default function Playing() {
     const { songs, currentSongId } = useSelector(songsSelector); // get songs from songsSelector
 
     const handleClickNext = () => {
-        dispatch(getSongById(song.id + 1));
-        dispatch(setCurrentSongId(song.id + 1));
+        const nextSongId = song.id + 1;
+        dispatch(getSongById(nextSongId));
+        if (currentSongId === null || currentSongId === undefined) {
+            dispatch(setCurrentSongId(nextSongId));
+        } else {
+            dispatch(setCurrentSongId(song.id + 1));
+        }
     };
 
     const handleClickPrevious = () => {
-        dispatch(getSongById(song.id - 1));
-        dispatch(setCurrentSongId(song.id - 1));
+        const previousSongId = song.id - 1;
+        dispatch(getSongById(previousSongId));
+        if (currentSongId === null || currentSongId === undefined) {
+            dispatch(setCurrentSongId(0)); // return to the first song if the current song is the first song
+        } else {
+            dispatch(setCurrentSongId(song.id - 1));
+        }
     };
 
     // Function to auto play the next song
@@ -34,7 +44,7 @@ export default function Playing() {
     };
     useEffect(() => {
         dispatch(setCurrentSongId(song.id)); // update currentSongId when the song was changed
-    }, [song.id, dispatch, setCurrentSongId]);
+    }, [song.id, dispatch]);
 
     return (
         <AudioPlayer

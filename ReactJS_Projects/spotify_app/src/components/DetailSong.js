@@ -8,7 +8,7 @@ export default function DetailSong() {
 
     useEffect(() => {
         dispatch(getSongById(0));
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="col-span-1 p-3">

@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getListSong, songsSelector } from "../redux/slice/SongsSlice";
 import { getSongById } from "../redux/slice/SongSlice";
 
 export default function ListSongs() {
 
-    const [idSong, setIdSong] = useState(0);
+    //const [idSong, setIdSong] = useState(0);
     const { songs, currentSongId } = useSelector((songsSelector));
     const dispatch = useDispatch();
 
     const handlePlaySong = (idSong) => {
-        setIdSong(idSong);
+        //setIdSong(idSong);
         dispatch(getSongById(idSong));
     };
 
     useEffect(() => {
         dispatch(getListSong());
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="col-span-2 overflow-y-scroll">
@@ -37,7 +37,7 @@ export default function ListSongs() {
                             key={song.id}
                             className={`bg-slate-800 h-12 text-xl cursor-pointer text-neutral-500 hover:bg-slate-600 hover:text-slate-100
                             ${currentSongId === song.id
-                                    ? "bg-slate-600 text-teal-300"
+                                    ? "bg-slate-700 text-teal-300"
                                     : ""
                                 }`}
                             onClick={() => handlePlaySong(song.id)}
