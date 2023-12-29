@@ -16,7 +16,7 @@ import {
 
 export default function ChessBoard() {
 	const [pieces, setPieces] = useState<Piece[]>(initialBoardState);
-	const [grabPosition, setGrapPosition] = useState<Position>({ x: -1, y: -1 });
+	const [grabPosition, setGrapPosition] = useState<Position>({ x: -1, y: -1});
 	const [activePiece, setActivePiece] = useState<HTMLElement | null>(null);
 
 	const chessboardRef = useRef<HTMLDivElement>(null);
@@ -45,8 +45,8 @@ export default function ChessBoard() {
 			const minY = chessboard.offsetTop - 25;
 			const maxX = chessboard.offsetLeft + chessboard.clientWidth - 75;
 			const maxY = chessboard.offsetTop + chessboard.clientHeight - 75;
-			const x = e.clientX - 50;
-			const y = e.clientY - 50;
+			const x = e.clientX - GRID_SIZE / 2;
+			const y = e.clientY - GRID_SIZE / 2;
 			activePiece.style.position = 'absolute';
 
 			//If x is smaller than minimum amount
