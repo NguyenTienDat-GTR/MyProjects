@@ -1,31 +1,36 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
-import { Songs } from "../Context";
+import { songSelector, getSongById } from "../redux/slice/SongSlice";
+import { songsSelector } from "../redux/slice/SongsSlice";
+
 
 export default function Playing() {
-    const { song, handleSetSong } = useContext(Songs);
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
+    const dispatch = useDispatch();
+    const { song } = useSelector(songSelector);
+    const { songs } = useSelector(songsSelector); // get songs from songsSelector
 
     const handleClickNext = () => {
-        handleSetSong(song.id + 1);
+        dispatch(getSongById(song.id + 1));
     };
 
     const handleClickPrevious = () => {
-        handleSetSong(song.id - 1);
+        dispatch(getSongById(song.id - 1));
     };
 
-    // Function to  auto play the next song
-    const auToPlayNextSong = () => {
+    // Function to auto play the next song
+    const autoPlayNextSong = () => {
         setTimeout(() => {
             setCurrentSongIndex((prevIndex) => {
                 // If it's the last song, go back to the first one
-                if (prevIndex === song.length - 1) {
-                    handleSetSong(song.id);
+                if (prevIndex === songs.length - 1) { // use songs.length instead of song.length
+                    dispatch(getSongById(songs[0].id)); // play the first song
                     return 0;
                 }
                 // Otherwise, go to the next song
-                handleSetSong(song.id + 1);
+                dispatch(getSongById(songs[prevIndex + 1].id)); // play the next song
                 return prevIndex + 1;
             });
         }, 3000);
@@ -39,7 +44,7 @@ export default function Playing() {
             showSkipControls={true}
             onClickNext={handleClickNext}
             onClickPrevious={handleClickPrevious}
-            onEnded={auToPlayNextSong}
+            onEnded={autoPlayNextSong}
         />
     );
 }

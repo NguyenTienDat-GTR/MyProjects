@@ -1,21 +1,22 @@
-import React, { useContext, useEffect, useState, useRef } from "react";
-import { Songs } from "../Context";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getListSong, songsSelector } from "../redux/slice/SongsSlice";
+import { getSongById } from "../redux/slice/SongSlice";
 
 export default function ListSongs() {
-    const { DataSongs, handleSetSong, song } = useContext(Songs);
+
     const [idSong, setIdSong] = useState(0);
-    const songRef = useRef(null);
+    const { songs } = useSelector((songsSelector));
+    const dispatch = useDispatch();
+
     const handlePlaySong = (idSong) => {
         setIdSong(idSong);
-        handleSetSong(idSong);
+        dispatch(getSongById(idSong));
     };
 
     useEffect(() => {
-        setIdSong(song.id);
-        if (songRef.current) {
-            songRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, [song]);
+        dispatch(getListSong());
+    }, []);
 
     return (
         <div className="col-span-2 overflow-y-scroll">
@@ -31,7 +32,7 @@ export default function ListSongs() {
                     </tr>
                 </thead>
                 <tbody>
-                    {DataSongs.map((song, index) => (
+                    {songs.map((song, index) => (
                         <tr
                             key={index}
                             className={`bg-slate-800 h-12 text-xl cursor-pointer text-neutral-500 hover:bg-slate-600 hover:text-slate-100
