@@ -26,14 +26,14 @@ export default function Playing() {
         setTimeout(() => {
             let nextIndex = currentSongId + 1;
             if (nextIndex >= songs.length) {
-                nextIndex = 0; // Quay lại bài đầu tiên nếu đang phát bài cuối cùng
+                nextIndex = 0; // return to the first song if the current song is the last song
             }
-            dispatch(getSongById(songs[nextIndex].id));
-            dispatch(setCurrentSongId(songs[nextIndex].id));
+            dispatch(getSongById(songs[nextIndex].id));// get the next song if the current song is the last song
+            dispatch(setCurrentSongId(songs[nextIndex].id));// set the current song to the next song
         }, 3000);
     };
     useEffect(() => {
-        dispatch(setCurrentSongId(song.id)); // Cập nhật currentSongId khi bài hát thay đổi
+        dispatch(setCurrentSongId(song.id)); // update currentSongId when the song was changed
     }, [song.id, dispatch, setCurrentSongId]);
 
     return (
