@@ -6,7 +6,7 @@ import { getSongById } from "../redux/slice/SongSlice";
 export default function ListSongs() {
 
     const [idSong, setIdSong] = useState(0);
-    const { songs } = useSelector((songsSelector));
+    const { songs, currentSongId } = useSelector((songsSelector));
     const dispatch = useDispatch();
 
     const handlePlaySong = (idSong) => {
@@ -34,9 +34,9 @@ export default function ListSongs() {
                 <tbody>
                     {songs.map((song, index) => (
                         <tr
-                            key={index}
+                            key={song.id}
                             className={`bg-slate-800 h-12 text-xl cursor-pointer text-neutral-500 hover:bg-slate-600 hover:text-slate-100
-                            ${idSong === song.id
+                            ${currentSongId === song.id
                                     ? "bg-slate-600 text-teal-300"
                                     : ""
                                 }`}
