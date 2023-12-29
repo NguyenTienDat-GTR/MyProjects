@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Songs } from "../Context";
 
 export default function ListSongs() {
     const { DataSongs, handleSetSong, song } = useContext(Songs);
     const [idSong, setIdSong] = useState(0);
-
+    const songRef = useRef(null);
     const handlePlaySong = (idSong) => {
         setIdSong(idSong);
         handleSetSong(idSong);
@@ -12,6 +12,9 @@ export default function ListSongs() {
 
     useEffect(() => {
         setIdSong(song.id);
+        if (songRef.current) {
+            songRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
     }, [song]);
 
     return (
