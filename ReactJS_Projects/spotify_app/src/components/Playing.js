@@ -14,20 +14,28 @@ export default function Playing() {
     const handleClickNext = () => {
         const nextSongId = song.id + 1;
         dispatch(getSongById(nextSongId));
-        if (currentSongId === null || currentSongId === undefined) {
-            dispatch(setCurrentSongId(nextSongId));
+
+        // If the current song is the last song, return to the first song
+        if (currentSongId === songs.length - 1) {
+            dispatch(getSongById(songs[0].id)); // uupdate song to the first song
+            dispatch(setCurrentSongId(songs[0].id)); // update currentSongId to the first song
         } else {
-            dispatch(setCurrentSongId(song.id + 1));
+            let nextIndex = currentSongId + 1;
+            dispatch(setCurrentSongId(nextIndex));// update currentSongId to the next song
         }
+
     };
 
     const handleClickPrevious = () => {
         const previousSongId = song.id - 1;
         dispatch(getSongById(previousSongId));
-        if (currentSongId === null || currentSongId === undefined) {
-            dispatch(setCurrentSongId(0)); // return to the first song if the current song is the first song
+
+        // If the current song is the first song, return to the last song
+        if (currentSongId === 0) {
+            dispatch(getSongById(songs.length - 1));// update song to the last song
+            dispatch(setCurrentSongId(songs.length - 1));// update currentSongId to the last song
         } else {
-            dispatch(setCurrentSongId(song.id - 1));
+            dispatch(setCurrentSongId(song.id - 1));// update currentSongId to the previous song
         }
     };
 
