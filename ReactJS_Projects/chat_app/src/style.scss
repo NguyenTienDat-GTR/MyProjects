@@ -1,5 +1,37 @@
+@mixin mobile {
+  @media screen and (max-width: 480px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media screen and (max-width: 1200px) {
+    @content;
+  }
+}
+
 .home {
   .container {
+    @include tablet {
+      width: 90%;
+    }
+    .sidebar {
+      position: relative;
+      .navbar {
+        button {
+          @include tablet {
+            position: absolute;
+            bottom: 10px;
+          }
+        }
+      }
+    }
     .chat {
       .messages {
         .message {
@@ -22,5 +54,10 @@
         }
       }
     }
+  }
+}
+.logo {
+  @include tablet {
+    display: none;
   }
 }

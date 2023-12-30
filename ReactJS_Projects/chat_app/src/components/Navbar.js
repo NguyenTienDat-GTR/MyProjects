@@ -11,7 +11,7 @@ const Navbar = () => {
                     className="bg-[#ddddf7] h-8 w-8 rounded-3xl object-cover mt-[1px]"
                 />
                 <span className="text-xl font-semibold">Dat</span>
-                <button className="bg-[#5b5d8d] text-[#ddddf7] text-[15px] border-none p-1 cursor-pointer">
+                <button className="button bg-[#5b5d8d] text-[#ddddf7] text-[15px] border-none p-1 cursor-pointer">
                     Log out
                 </button>
             </div>
