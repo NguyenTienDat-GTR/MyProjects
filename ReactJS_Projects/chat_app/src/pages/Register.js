@@ -1,5 +1,4 @@
 import React from "react";
-import AddAvatar from "../images/addAvatar.png";
 
 const Register = () => {
   return (
@@ -13,7 +12,7 @@ const Register = () => {
           <input className="border-b-2 border-[#a7bcff] p-4 placeholder-[rgba(175,175,175)]" type="password" placeholder="input your password" />
           <input style={{ display: "none" }} type="file" id="file" />
           <label htmlFor="file" className="flex items-center gap-2 cursor-pointer w-[50%] text-[#8da4f1] text-[15px ]">
-            <img src={AddAvatar} alt="" className="w-8 h-8" />
+            <img src="../images/addAvatar.png" alt="" className="w-8 h-8" />
             <span>Add your avatar</span>
           </label>
           <button className="bg-[#7b96ec] text-white p-[10px] font-bold cursor-pointer text-xl">Sign up</button>

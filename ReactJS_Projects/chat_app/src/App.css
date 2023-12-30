@@ -1,0 +1,9 @@
+.sidebar {
+  flex: 1;
+}
+.chat {
+  flex: 2;
+}
+.messages {
+  height: calc(100% - 120px);
+}
