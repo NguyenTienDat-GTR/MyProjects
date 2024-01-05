@@ -45,10 +45,11 @@
           }
           .messageContent {
             align-items: flex-end;
+            margin-left: -15px;
             p {
               background-color: #8da4f1;
               color: white;
-              border-radius: 10px 0px 10px 10px;
+              border-radius: 20px;
             }
           }
         }
